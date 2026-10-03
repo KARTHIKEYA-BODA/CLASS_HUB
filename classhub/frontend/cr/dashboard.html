@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CR Dashboard – ClassHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+  </head>
+  <body>
+    <div id="chDashboardRoot"></div>
+
+    <!-- Notes Upload Modal -->
+    <div class="modal fade" id="notesModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="notesUploadForm"
+            onsubmit="ModNotes.uploadForm(event, 'notesBox')"
+          >
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-upload me-2"></i>Upload Note
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Subject</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  name="subject"
+                  placeholder="e.g. Data Structures"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Title</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  placeholder="e.g. Unit 3 - Linked Lists"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">File (PDF or Image)</label
+                ><input
+                  type="file"
+                  class="form-control"
+                  name="file"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button
+                type="submit"
+                class="btn btn-ch-primary"
+                id="notesUploadBtn"
+              >
+                <i class="bi bi-upload me-2"></i>Upload Note
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assignment Modal -->
+    <div class="modal fade" id="assignmentModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="assignmentForm"
+            onsubmit="ModAssignments.uploadForm(event, 'assignmentsBox')"
+          >
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-clipboard2-plus me-2"></i>New Assignment
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Subject</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  name="subject"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Assignment Title</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label
+                ><textarea
+                  class="form-control"
+                  name="description"
+                  rows="3"
+                ></textarea>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Date Assigned</label
+                  ><input
+                    type="date"
+                    class="form-control"
+                    name="date_assigned"
+                    required
+                  />
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label">Last Submission</label
+                  ><input
+                    type="date"
+                    class="form-control"
+                    name="last_submission"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Attachment (optional)</label
+                ><input type="file" class="form-control" name="attachment" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button
+                type="submit"
+                class="btn btn-ch-primary"
+                id="assignmentSubmitBtn"
+              >
+                <i class="bi bi-upload me-2"></i>Post Assignment
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal fade" id="projectModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="projectForm"
+            onsubmit="ModProjects.uploadForm(event, 'projectsBox')"
+          >
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-kanban me-2"></i>New Project
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Project Title</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  name="title"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Subject</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  name="subject"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label
+                ><textarea
+                  class="form-control"
+                  name="description"
+                  rows="3"
+                ></textarea>
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Assigned Date</label
+                  ><input
+                    type="date"
+                    class="form-control"
+                    name="assigned_date"
+                    required
+                  />
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label">Submission Deadline</label
+                  ><input
+                    type="date"
+                    class="form-control"
+                    name="submission_deadline"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Attachment (optional)</label
+                ><input type="file" class="form-control" name="attachment" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button
+                type="submit"
+                class="btn btn-ch-primary"
+                id="projectSubmitBtn"
+              >
+                <i class="bi bi-upload me-2"></i>Post Project
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notice Modal -->
+    <div class="modal fade" id="noticeModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="noticeForm"
+            onsubmit="
+              ModNotices.submitForm(
+                event,
+                'noticesBox',
+                true,
+                window.user.id,
+                'cr',
+              )
+            "
+          >
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-megaphone me-2"></i>Post Notice
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Title</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="noticeTitle"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label
+                ><textarea
+                  class="form-control"
+                  id="noticeDescription"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="noticeImportant"
+                /><label class="form-check-label small" for="noticeImportant"
+                  >Mark as Important</label
+                >
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">
+                <i class="bi bi-send me-2"></i>Post Notice
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div class="modal fade" id="scheduleModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="scheduleForm" onsubmit="ModSchedule.submitForm(event)">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="scheduleModalTitle">
+                Add Class
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="scheduleModalDay" />
+              <div class="mb-3">
+                <label class="form-label">Subject</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="scheduleSubject"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Faculty</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="scheduleFaculty"
+                  required
+                />
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">Start Time</label
+                  ><input
+                    type="time"
+                    class="form-control"
+                    id="scheduleStart"
+                    required
+                  />
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label">End Time</label
+                  ><input
+                    type="time"
+                    class="form-control"
+                    id="scheduleEnd"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Room Number</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="scheduleRoom"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">
+                Save Class
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Class Strength Modal -->
+    <div class="modal fade" id="strengthModal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <form id="strengthForm">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">Edit Class Strength</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <label class="form-label">Total Students</label
+              ><input
+                type="number"
+                class="form-control"
+                id="strengthInput"
+                min="1"
+                required
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js?v=2"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/shell.js?v=3"></script>
+    <script src="../js/modules/schedule.js"></script>
+    <script src="../js/modules/notes.js"></script>
+    <script src="../js/modules/assignments.js"></script>
+    <script src="../js/modules/projects.js"></script>
+    <script src="../js/modules/ranking-notices.js"></script>
+    <script>
+      window.user = ChAuth.guard("cr");
+      if (window.user) initCRDashboard();
+
+      function crNavItems() {
+        return [
+          {
+            key: "overview",
+            section: "Main",
+            icon: "bi-grid-1x2-fill",
+            label: "Overview",
+          },
+          {
+            key: "attendance",
+            section: "Main",
+            icon: "bi-calendar-check",
+            label: "Take Attendance",
+          },
+          {
+            key: "schedule",
+            section: "Main",
+            icon: "bi-calendar3",
+            label: "Class Schedule",
+          },
+          {
+            key: "notes",
+            section: "Content",
+            icon: "bi-journal-richtext",
+            label: "Notes",
+          },
+          {
+            key: "assignments",
+            section: "Content",
+            icon: "bi-clipboard2-data",
+            label: "Assignments",
+          },
+          {
+            key: "projects",
+            section: "Content",
+            icon: "bi-kanban",
+            label: "Projects",
+          },
+          {
+            key: "notices",
+            section: "Content",
+            icon: "bi-megaphone",
+            label: "Notice Board",
+          },
+          {
+            key: "ranking",
+            section: "View Only",
+            icon: "bi-trophy",
+            label: "Semester Ranking",
+          },
+          {
+            key: "profile",
+            section: "Account",
+            icon: "bi-person-circle",
+            label: "My Profile",
+          },
+        ];
+      }
+
+      function initCRDashboard() {
+        ChShell.render({
+          role: "cr",
+          user: window.user,
+          navItems: crNavItems(),
+          activeKey: "overview",
+          pageTitle: `Welcome, ${window.user.name.split(" ")[0]}! 👋`,
+          pageSubtitle: "Class Representative Panel",
+        });
+        loadSection("overview");
+      }
+
+      async function loadSection(key) {
+        document
+          .querySelectorAll(".ch-nav-link")
+          .forEach((el) => el.classList.remove("active"));
+        document.querySelector(`[data-nav="${key}"]`)?.classList.add("active");
+        ChShell.closeSidebar();
+
+        const titles = {
+          overview: ["Dashboard Overview", "Your class snapshot"],
+          attendance: ["Take Attendance", "10:00 AM & 2:00 PM sessions"],
+          schedule: ["Class Schedule", "Manage weekly timetable"],
+          notes: ["Notes", "Upload PDFs & images for students"],
+          assignments: ["Assignments", "Post & manage assignments"],
+          projects: ["Projects", "Post & manage projects"],
+          notices: ["Notice Board", "Post announcements"],
+          ranking: ["Semester Ranking", "View only — managed by Admin"],
+          profile: ["My Profile", "Manage your account"],
+        };
+        document.querySelector(".ch-topbar-title").innerHTML =
+          `${titles[key][0]}<span class="subtitle">${titles[key][1]}</span>`;
+
+        const content = document.getElementById("chContent");
+        content.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+
+        switch (key) {
+          case "overview":
+            return renderOverview();
+          case "attendance":
+            return renderAttendanceSection();
+          case "schedule":
+            return renderScheduleSection();
+          case "notes":
+            return renderNotesSection();
+          case "assignments":
+            return renderAssignmentsSection();
+          case "projects":
+            return renderProjectsSection();
+          case "notices":
+            return renderNoticesSection();
+          case "ranking":
+            content.innerHTML = `<div class="ch-panel"><div class="ch-panel-body" id="rankingBox"></div></div>`;
+            return ModRanking.render("rankingBox", false);
+          case "profile":
+            return renderProfile();
+        }
+      }
+
+      // ---------------- OVERVIEW ----------------
+      async function renderOverview() {
+        const content = document.getElementById("chContent");
+        try {
+          const stats = (await ChAPI.get("/dashboard/cr-stats")).stats;
+          content.innerHTML = `
+        <div class="row g-3 mb-4">
+          <div class="col-md-3 col-6">
+            <div class="ch-stat-card">
+              <div class="ch-icon-box bg-soft-primary"><i class="bi bi-people-fill"></i></div>
+              <div class="stat-value">${stats.totalStudents}</div><div class="stat-label">Total Students</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="ch-stat-card">
+              <div class="ch-icon-box bg-soft-warning"><i class="bi bi-person-lines-fill"></i></div>
+              <div class="stat-value">${stats.classStrength}</div><div class="stat-label">Class Strength</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="ch-stat-card">
+              <div class="ch-icon-box bg-soft-success"><i class="bi bi-sun-fill"></i></div>
+              <div class="stat-value">${stats.attendanceMarkedToday.session_10AM}</div><div class="stat-label">Marked — 10 AM</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="ch-stat-card">
+              <div class="ch-icon-box bg-soft-info"><i class="bi bi-moon-stars-fill"></i></div>
+              <div class="stat-value">${stats.attendanceMarkedToday.session_2PM}</div><div class="stat-label">Marked — 2 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <div class="ch-panel">
+              <div class="ch-panel-header"><h5><i class="bi bi-calendar3 me-2"></i>Today's Schedule</h5></div>
+              <div class="ch-panel-body" id="ovSchedule"></div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="ch-panel">
+              <div class="ch-panel-body">
+                <h5 class="fw-bold mb-3"><i class="bi bi-lightning-charge me-2"></i>Quick Actions</h5>
+                <div class="d-flex flex-column gap-2">
+                  <button class="btn btn-ch-primary text-start" onclick="loadSection('attendance')"><i class="bi bi-calendar-check me-2"></i>Take Attendance Now</button>
+                  <button class="btn btn-ch-outline text-start" data-bs-toggle="modal" data-bs-target="#notesModal"><i class="bi bi-upload me-2"></i>Upload Notes</button>
+                  <button class="btn btn-ch-outline text-start" data-bs-toggle="modal" data-bs-target="#assignmentModal"><i class="bi bi-clipboard2-plus me-2"></i>Post Assignment</button>
+                  <button class="btn btn-ch-outline text-start" data-bs-toggle="modal" data-bs-target="#noticeModal"><i class="bi bi-megaphone me-2"></i>Post Notice</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+          ModSchedule.renderToday("ovSchedule");
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      // ---------------- ATTENDANCE (core module) ----------------
+      async function renderAttendanceSection() {
+        const content = document.getElementById("chContent");
+        const today = ChUtils.todayISO();
+        content.innerHTML = `
+      <div class="ch-panel mb-4">
+        <div class="ch-panel-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-control" id="attDate" value="${today}" max="${today}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Session</label>
+              <select class="form-select" id="attSession">
+                <option value="10AM">10:00 AM Session</option>
+                <option value="2PM">2:00 PM Session</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-ch-primary w-100" onclick="loadAttendanceGrid()"><i class="bi bi-search me-2"></i>Load Students</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ch-panel">
+        <div class="ch-panel-header">
+          <h5><i class="bi bi-people me-2"></i>Mark Attendance</h5>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-ch-outline" onclick="markAll('Present')"><i class="bi bi-check-all me-1"></i>All Present</button>
+            <button class="btn btn-sm btn-ch-outline" onclick="markAll('Absent')"><i class="bi bi-x-lg me-1"></i>All Absent</button>
+          </div>
+        </div>
+        <div class="ch-panel-body p-0" id="attendanceGrid">
+          <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+        </div>
+        <div class="ch-panel-body pt-0">
+          <button class="btn btn-ch-primary w-100 py-2" id="submitAttendanceBtn" onclick="submitAttendance()"><i class="bi bi-check-circle me-2"></i>Save Attendance</button>
+        </div>
+      </div>`;
+
+        // Auto-select current session based on time
+        const hour = new Date().getHours();
+        document.getElementById("attSession").value =
+          hour < 14 ? "10AM" : "2PM";
+        loadAttendanceGrid();
+      }
+
+      let attendanceState = {};
+
+      async function loadAttendanceGrid() {
+        const date = document.getElementById("attDate").value;
+        const session = document.getElementById("attSession").value;
+        const grid = document.getElementById("attendanceGrid");
+        grid.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>`;
+        attendanceState = {};
+
+        try {
+          const res = await ChAPI.get(
+            `/attendance/session?date=${date}&session=${session}`,
+          );
+          if (!res.students || res.students.length === 0) {
+            grid.innerHTML = ChUtils.emptyState(
+              "bi-people",
+              "No active students found.",
+            );
+            return;
+          }
+          res.students.forEach(
+            (s) => (attendanceState[s.student_id] = s.status),
+          );
+
+          grid.innerHTML = res.students
+            .map(
+              (s) => `
+        <div class="ch-attendance-row" id="attRow-${s.student_id}">
+          <div>
+            <div class="fw-semibold small">${ChUtils.escapeHtml(s.name)}</div>
+            <div style="font-size:.76rem; color:var(--ch-text-muted)">${s.roll_number}</div>
+          </div>
+          <div class="ch-toggle-btns">
+            <button type="button" class="ch-toggle-btn present ${s.status === "Present" ? "active" : ""}" onclick="setAttendance(${s.student_id}, 'Present')"><i class="bi bi-check-lg"></i> Present</button>
+            <button type="button" class="ch-toggle-btn absent ${s.status === "Absent" ? "active" : ""}" onclick="setAttendance(${s.student_id}, 'Absent')"><i class="bi bi-x-lg"></i> Absent</button>
+          </div>
+        </div>`,
+            )
+            .join("");
+        } catch (err) {
+          grid.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      function setAttendance(studentId, status) {
+        attendanceState[studentId] = status;
+        const row = document.getElementById(`attRow-${studentId}`);
+        row
+          .querySelector(".present")
+          .classList.toggle("active", status === "Present");
+        row
+          .querySelector(".absent")
+          .classList.toggle("active", status === "Absent");
+      }
+
+      function markAll(status) {
+        Object.keys(attendanceState).forEach((id) =>
+          setAttendance(parseInt(id), status),
+        );
+      }
+
+      async function submitAttendance() {
+        const date = document.getElementById("attDate").value;
+        const session = document.getElementById("attSession").value;
+        const records = Object.entries(attendanceState).map(
+          ([student_id, status]) => ({
+            student_id: parseInt(student_id),
+            status,
+          }),
+        );
+
+        if (records.length === 0) {
+          ChUtils.toast("No students to mark.", "warning");
+          return;
+        }
+
+        const btn = document.getElementById("submitAttendanceBtn");
+        btn.disabled = true;
+        btn.innerHTML =
+          '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+        try {
+          await ChAPI.post("/attendance/mark", {
+            attendance_date: date,
+            session,
+            records,
+          });
+          ChUtils.toast(`Attendance saved for ${session} session!`, "success");
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML =
+            '<i class="bi bi-check-circle me-2"></i>Save Attendance';
+        }
+      }
+
+      // ---------------- SCHEDULE ----------------
+      function renderScheduleSection() {
+        document.getElementById("chContent").innerHTML =
+          `<div id="weeklyScheduleContainer"></div>`;
+        ModSchedule.renderWeekly("weeklyScheduleContainer", true);
+      }
+
+      // ---------------- NOTES ----------------
+      function renderNotesSection() {
+        document.getElementById("chContent").innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" data-bs-toggle="modal" data-bs-target="#notesModal"><i class="bi bi-upload me-2"></i>Upload Note</button>
+      </div>
+      <div id="notesBox"></div>`;
+        ModNotes.render("notesBox", true, window.user.id);
+      }
+
+      // ---------------- ASSIGNMENTS ----------------
+      function renderAssignmentsSection() {
+        document.getElementById("chContent").innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" data-bs-toggle="modal" data-bs-target="#assignmentModal"><i class="bi bi-plus-lg me-2"></i>New Assignment</button>
+      </div>
+      <div id="assignmentsBox"></div>`;
+        ModAssignments.render("assignmentsBox", true);
+      }
+
+      // ---------------- PROJECTS ----------------
+      function renderProjectsSection() {
+        document.getElementById("chContent").innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" data-bs-toggle="modal" data-bs-target="#projectModal"><i class="bi bi-plus-lg me-2"></i>New Project</button>
+      </div>
+      <div id="projectsBox"></div>`;
+        ModProjects.render("projectsBox", true);
+      }
+
+      // ---------------- NOTICES ----------------
+      function renderNoticesSection() {
+        document.getElementById("chContent").innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" data-bs-toggle="modal" data-bs-target="#noticeModal"><i class="bi bi-plus-lg me-2"></i>Post Notice</button>
+      </div>
+      <div id="noticesBox"></div>`;
+        ModNotices.render("noticesBox", true, window.user.id, "cr");
+      }
+
+      // ---------------- PROFILE (incl. class strength) ----------------
+      async function renderProfile() {
+        const content = document.getElementById("chContent");
+        try {
+          const res = await ChAPI.get("/cr/profile");
+          const p = res.profile;
+          content.innerHTML = `
+        <div class="ch-profile-header mb-4">
+          ${ChShell.avatarHTML(p, "lg")}
+          <div>
+            <h4 class="fw-bold text-white mb-1">${ChUtils.escapeHtml(p.name)}</h4>
+            <p class="text-white-50 mb-0">${p.roll_number} • Class Representative • ${p.branch} Sem ${p.semester}</p>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="ch-panel">
+              <div class="ch-panel-header"><h5><i class="bi bi-pencil-square me-2"></i>Edit Profile</h5></div>
+              <div class="ch-panel-body">
+                <form id="profileForm">
+                  <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Full Name</label><input type="text" class="form-control" id="pfName" value="${ChUtils.escapeHtml(p.name)}" required></div>
+                    <div class="col-md-6"><label class="form-label">Roll Number <span class="badge bg-secondary bg-opacity-25 text-secondary">Locked</span></label><input type="text" class="form-control" value="${p.roll_number}" disabled></div>
+                    <div class="col-md-6"><label class="form-label">Email</label><input type="email" class="form-control" id="pfEmail" value="${ChUtils.escapeHtml(p.email)}" required></div>
+                    <div class="col-md-6"><label class="form-label">Phone</label><input type="tel" class="form-control" id="pfPhone" value="${ChUtils.escapeHtml(p.phone)}" required></div>
+                    <div class="col-md-6"><label class="form-label">New Password <span class="small" style="color:var(--ch-text-muted)">(optional)</span></label><input type="password" class="form-control" id="pfPassword" minlength="6" placeholder="Leave blank to keep current"></div>
+                    <div class="col-md-6"><label class="form-label">Profile Picture</label><input type="file" class="form-control" id="pfImage" accept="image/*"></div>
+                  </div>
+                  <button type="submit" class="btn btn-ch-primary mt-4" id="profileSaveBtn"><i class="bi bi-check-lg me-2"></i>Save Changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="ch-panel">
+              <div class="ch-panel-body text-center">
+                <div class="ch-icon-box bg-soft-warning mx-auto"><i class="bi bi-people-fill"></i></div>
+                <h6 class="fw-bold">Class Strength</h6>
+                <div class="fs-2 fw-bold mb-2">${p.class_strength}</div>
+                <button class="btn btn-ch-outline btn-sm w-100" onclick="document.getElementById('strengthInput').value=${p.class_strength}; new bootstrap.Modal(document.getElementById('strengthModal')).show();">
+                  <i class="bi bi-pencil me-1"></i>Edit Strength
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+          document
+            .getElementById("profileForm")
+            .addEventListener("submit", async (e) => {
+              e.preventDefault();
+              const btn = document.getElementById("profileSaveBtn");
+              btn.disabled = true;
+              btn.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+              const fd = new FormData();
+              fd.append("name", document.getElementById("pfName").value);
+              fd.append("email", document.getElementById("pfEmail").value);
+              fd.append("phone", document.getElementById("pfPhone").value);
+              const pw = document.getElementById("pfPassword").value;
+              if (pw) fd.append("password", pw);
+              const imgFile = document.getElementById("pfImage").files[0];
+              if (imgFile) fd.append("profile_image", imgFile);
+              try {
+                const updateRes = await ChAPI.put("/cr/profile", fd);
+                const updatedUser = { ...window.user, ...updateRes.profile };
+                localStorage.setItem("ch_user", JSON.stringify(updatedUser));
+                ChUtils.toast("Profile updated successfully!", "success");
+                setTimeout(() => window.location.reload(), 800);
+              } catch (err) {
+                ChUtils.toast(err.message, "error");
+                btn.disabled = false;
+                btn.innerHTML =
+                  '<i class="bi bi-check-lg me-2"></i>Save Changes';
+              }
+            });
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      document
+        .getElementById("strengthForm")
+        ?.addEventListener("submit", async (e) => {});
+      document.addEventListener("submit", async (e) => {
+        if (e.target.id === "strengthForm") {
+          e.preventDefault();
+          try {
+            await ChAPI.put("/cr/class-strength", {
+              class_strength: parseInt(
+                document.getElementById("strengthInput").value,
+              ),
+            });
+            ChUtils.toast("Class strength updated!", "success");
+            bootstrap.Modal.getInstance(
+              document.getElementById("strengthModal"),
+            ).hide();
+            renderProfile();
+          } catch (err) {
+            ChUtils.toast(err.message, "error");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

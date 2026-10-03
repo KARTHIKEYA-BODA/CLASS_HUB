@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" href="data:," />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard – ClassHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+  </head>
+  <body>
+    <div id="chDashboardRoot"></div>
+
+    <!-- Add/Edit Student Modal -->
+    <div class="modal fade" id="studentModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="studentForm">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="studentModalTitle">
+                Add Student
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="stuId" />
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="stuName"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Roll Number</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="stuRoll"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email</label
+                  ><input
+                    type="email"
+                    class="form-control"
+                    id="stuEmail"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone</label
+                  ><input
+                    type="tel"
+                    class="form-control"
+                    id="stuPhone"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Branch</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="stuBranch"
+                    value="CSE"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Semester</label
+                  ><input
+                    type="number"
+                    class="form-control"
+                    id="stuSemester"
+                    value="1"
+                    min="1"
+                    max="8"
+                  />
+                </div>
+                <div class="col-md-6" id="stuPasswordGroup">
+                  <label class="form-label">Password</label
+                  ><input
+                    type="password"
+                    class="form-control"
+                    id="stuPassword"
+                    minlength="6"
+                  />
+                </div>
+                <div class="col-md-6" id="stuStatusGroup" style="display: none">
+                  <label class="form-label">Status</label>
+                  <select class="form-select" id="stuStatus">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button
+                type="submit"
+                class="btn btn-ch-primary"
+                id="studentSaveBtn"
+              >
+                Save Student
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit CR Modal -->
+    <div class="modal fade" id="crModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="crForm">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="crModalTitle">Add CR</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="crId" />
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="crName"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Roll Number</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="crRoll"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email</label
+                  ><input
+                    type="email"
+                    class="form-control"
+                    id="crEmail"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone</label
+                  ><input
+                    type="tel"
+                    class="form-control"
+                    id="crPhone"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Branch</label
+                  ><input
+                    type="text"
+                    class="form-control"
+                    id="crBranch"
+                    value="CSE"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Semester</label
+                  ><input
+                    type="number"
+                    class="form-control"
+                    id="crSemester"
+                    value="1"
+                    min="1"
+                    max="8"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Class Strength</label
+                  ><input
+                    type="number"
+                    class="form-control"
+                    id="crStrength"
+                    value="60"
+                    min="1"
+                  />
+                </div>
+                <div class="col-md-6" id="crPasswordGroup">
+                  <label class="form-label">Password</label
+                  ><input
+                    type="password"
+                    class="form-control"
+                    id="crPassword"
+                    minlength="6"
+                  />
+                </div>
+                <div class="col-md-6" id="crStatusGroup" style="display: none">
+                  <label class="form-label">Status</label>
+                  <select class="form-select" id="crStatus">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary" id="crSaveBtn">
+                Save CR
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance % Modal -->
+    <div class="modal fade" id="attPercModal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <form id="attPercForm">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">Update Attendance %</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="apStudentId" />
+              <p class="fw-semibold small mb-3" id="apStudentName"></p>
+              <div class="mb-3">
+                <label class="form-label">Total Classes</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  id="apTotal"
+                  min="0"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Attended Classes</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  id="apAttended"
+                  min="0"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ranking Modal -->
+    <div class="modal fade" id="rankingModal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <form
+            id="rankingForm"
+            onsubmit="ModRanking.submitForm(event, 'rankingBox')"
+          >
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">Update Ranking</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Student</label>
+                <select
+                  class="form-select"
+                  id="rankStudentSelect"
+                  required
+                ></select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Semester</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  id="rankSemester"
+                  min="1"
+                  max="8"
+                  value="1"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Rank</label
+                ><input
+                  type="number"
+                  class="form-control"
+                  id="rankNo"
+                  min="1"
+                  required
+                />
+              </div>
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label">SGPA</label
+                  ><input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    id="rankSgpa"
+                    min="0"
+                    max="10"
+                    required
+                  />
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label">CGPA</label
+                  ><input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    id="rankCgpa"
+                    min="0"
+                    max="10"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">
+                Save Ranking
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notice Modal -->
+    <div class="modal fade" id="noticeModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="noticeForm"
+            onsubmit="
+              ModNotices.submitForm(
+                event,
+                'noticesBox',
+                true,
+                window.user.id,
+                'admin',
+              )
+            "
+          >
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-megaphone me-2"></i>Post Notice
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Title</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="noticeTitle"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Description</label
+                ><textarea
+                  class="form-control"
+                  id="noticeDescription"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="noticeImportant"
+                /><label class="form-check-label small" for="noticeImportant"
+                  >Mark as Important</label
+                >
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">
+                <i class="bi bi-send me-2"></i>Post Notice
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Info Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="contactForm">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">Edit Contact Information</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Admin Name</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="cfAdminName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label
+                ><input
+                  type="email"
+                  class="form-control"
+                  id="cfEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Phone</label
+                ><input type="tel" class="form-control" id="cfPhone" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">College Name</label
+                ><input
+                  type="text"
+                  class="form-control"
+                  id="cfCollegeName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address</label
+                ><textarea
+                  class="form-control"
+                  id="cfAddress"
+                  rows="2"
+                ></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel</button
+              ><button type="submit" class="btn btn-ch-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js?v=2"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/shell.js?v=3"></script>
+    <script src="../js/modules/schedule.js"></script>
+    <script src="../js/modules/ranking-notices.js"></script>
+    <script src="../js/modules/assignments.js"></script>
+    <script src="../js/modules/notes.js"></script>
+    <script src="../js/modules/projects.js"></script>
+    <script>
+      window.user = ChAuth.guard("admin");
+      if (window.user) initAdminDashboard();
+
+      function adminNavItems() {
+        return [
+          {
+            key: "overview",
+            section: "Main",
+            icon: "bi-grid-1x2-fill",
+            label: "Overview",
+          },
+          {
+            key: "students",
+            section: "User Management",
+            icon: "bi-people-fill",
+            label: "Manage Students",
+          },
+          {
+            key: "crs",
+            section: "User Management",
+            icon: "bi-person-badge-fill",
+            label: "Manage CRs",
+          },
+          {
+            key: "attendance",
+            section: "Academics",
+            icon: "bi-calendar-check",
+            label: "Attendance %",
+          },
+          {
+            key: "ranking",
+            section: "Academics",
+            icon: "bi-trophy",
+            label: "Semester Ranking",
+          },
+          {
+            key: "schedule",
+            section: "Academics",
+            icon: "bi-calendar3",
+            label: "Class Schedule",
+          },
+          {
+            key: "notices",
+            section: "Communication",
+            icon: "bi-megaphone",
+            label: "Notice Board",
+          },
+          {
+            key: "feedback",
+            section: "Communication",
+            icon: "bi-chat-square-heart",
+            label: "Feedback",
+            badge: true,
+          },
+          {
+            key: "contact",
+            section: "Communication",
+            icon: "bi-envelope",
+            label: "Contact Info",
+          },
+          {
+            key: "profile",
+            section: "Account",
+            icon: "bi-person-circle",
+            label: "My Profile",
+          },
+        ];
+      }
+
+      function initAdminDashboard() {
+        ChShell.render({
+          role: "admin",
+          user: window.user,
+          navItems: adminNavItems(),
+          activeKey: "overview",
+          pageTitle: `Welcome, ${window.user.name.split(" ")[0]}! 👋`,
+          pageSubtitle: "Full System Administration",
+        });
+        loadSection("overview");
+        refreshFeedbackBadge();
+      }
+
+      async function refreshFeedbackBadge() {
+        try {
+          const res = await ChAPI.get("/feedback");
+          const unread = (res.feedback || []).filter(
+            (f) => f.status === "unread",
+          ).length;
+          ChShell.setBadge("feedback", unread);
+        } catch {}
+      }
+
+      async function loadSection(key) {
+        document
+          .querySelectorAll(".ch-nav-link")
+          .forEach((el) => el.classList.remove("active"));
+        document.querySelector(`[data-nav="${key}"]`)?.classList.add("active");
+        ChShell.closeSidebar();
+
+        const titles = {
+          overview: ["Dashboard Overview", "System-wide statistics"],
+          students: [
+            "Manage Students",
+            "Add, edit, or remove student accounts",
+          ],
+          crs: [
+            "Manage Class Representatives",
+            "Add, edit, or remove CR accounts",
+          ],
+          attendance: [
+            "Attendance Percentage",
+            "Upload official attendance records",
+          ],
+          ranking: ["Semester Ranking", "Upload SGPA/CGPA based rankings"],
+          schedule: ["Class Schedule", "Manage weekly timetable"],
+          notices: ["Notice Board", "Manage all notices"],
+          feedback: ["Student Feedback", "View feedback — Admin only"],
+          contact: ["Contact Information", "Manage public contact details"],
+          profile: ["My Profile", "Manage your admin account"],
+        };
+        document.querySelector(".ch-topbar-title").innerHTML =
+          `${titles[key][0]}<span class="subtitle">${titles[key][1]}</span>`;
+
+        const content = document.getElementById("chContent");
+        content.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+
+        switch (key) {
+          case "overview":
+            return renderOverview();
+          case "students":
+            return renderStudents();
+          case "crs":
+            return renderCRs();
+          case "attendance":
+            return renderAttendancePercentages();
+          case "ranking":
+            content.innerHTML = `<div class="d-flex justify-content-end mb-3"><button class="btn btn-ch-primary" onclick="openRankingModal()"><i class="bi bi-plus-lg me-2"></i>Update Ranking</button></div><div class="ch-panel"><div class="ch-panel-body" id="rankingBox"></div></div>`;
+            return ModRanking.render("rankingBox", true);
+          case "schedule":
+            return renderScheduleSection();
+          case "notices":
+            return renderNoticesSection();
+          case "feedback":
+            return renderFeedback();
+          case "contact":
+            return renderContactSection();
+          case "profile":
+            return renderProfile();
+        }
+      }
+
+      // ---------------- OVERVIEW ----------------
+      async function renderOverview() {
+        const content = document.getElementById("chContent");
+        try {
+          const stats = (await ChAPI.get("/dashboard/admin-stats")).stats;
+          content.innerHTML = `
+        <div class="row g-3 mb-4">
+          <div class="col-md-3 col-6"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-primary"><i class="bi bi-people-fill"></i></div><div class="stat-value">${stats.totalStudents}</div><div class="stat-label">Total Students</div></div></div>
+          <div class="col-md-3 col-6"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-warning"><i class="bi bi-person-badge-fill"></i></div><div class="stat-value">${stats.totalCRs}</div><div class="stat-label">Total CRs</div></div></div>
+          <div class="col-md-3 col-6"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-success"><i class="bi bi-calendar-check"></i></div><div class="stat-value">${stats.avgAttendance || 0}%</div><div class="stat-label">Avg Attendance</div></div></div>
+          <div class="col-md-3 col-6"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-danger"><i class="bi bi-chat-square-heart"></i></div><div class="stat-value">${stats.unreadFeedback}</div><div class="stat-label">Unread Feedback</div></div></div>
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-info"><i class="bi bi-journal-richtext"></i></div><div class="stat-value">${stats.totalNotes}</div><div class="stat-label">Notes Uploaded</div></div></div>
+          <div class="col-md-4"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-primary"><i class="bi bi-clipboard2-data"></i></div><div class="stat-value">${stats.totalAssignments}</div><div class="stat-label">Assignments</div></div></div>
+          <div class="col-md-4"><div class="ch-stat-card"><div class="ch-icon-box bg-soft-warning"><i class="bi bi-kanban"></i></div><div class="stat-value">${stats.totalProjects}</div><div class="stat-label">Projects</div></div></div>
+        </div>
+        <div class="ch-panel">
+          <div class="ch-panel-body">
+            <h5 class="fw-bold mb-3"><i class="bi bi-lightning-charge me-2"></i>Quick Actions</h5>
+            <div class="row g-2">
+              <div class="col-md-3 col-6"><button class="btn btn-ch-outline w-100" onclick="loadSection('students')"><i class="bi bi-person-plus me-2"></i>Add Student</button></div>
+              <div class="col-md-3 col-6"><button class="btn btn-ch-outline w-100" onclick="loadSection('crs')"><i class="bi bi-person-badge me-2"></i>Add CR</button></div>
+              <div class="col-md-3 col-6"><button class="btn btn-ch-outline w-100" onclick="loadSection('attendance')"><i class="bi bi-calendar-check me-2"></i>Upload Attendance</button></div>
+              <div class="col-md-3 col-6"><button class="btn btn-ch-outline w-100" onclick="loadSection('notices')"><i class="bi bi-megaphone me-2"></i>Post Notice</button></div>
+            </div>
+          </div>
+        </div>`;
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      // ---------------- MANAGE STUDENTS ----------------
+      async function renderStudents() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" onclick="openStudentModal()"><i class="bi bi-person-plus me-2"></i>Add Student</button>
+      </div>
+      <div class="ch-panel"><div class="ch-table-wrap" id="studentsTableBox"></div></div>`;
+        await loadStudentsTable();
+      }
+
+      async function loadStudentsTable() {
+        const box = document.getElementById("studentsTableBox");
+        box.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>`;
+        try {
+          const res = await ChAPI.get("/students");
+          if (!res.students || res.students.length === 0) {
+            box.innerHTML = ChUtils.emptyState(
+              "bi-people",
+              "No students registered yet.",
+            );
+            return;
+          }
+          box.innerHTML = `
+        <table class="table-ch">
+          <thead><tr><th>Name</th><th>Roll No</th><th>Email</th><th>Phone</th><th>Branch/Sem</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${res.students
+            .map(
+              (s) => `
+            <tr>
+              <td class="fw-semibold">${ChUtils.escapeHtml(s.name)}</td>
+              <td>${s.roll_number}</td>
+              <td>${ChUtils.escapeHtml(s.email)}</td>
+              <td>${s.phone}</td>
+              <td>${s.branch} / Sem ${s.semester}</td>
+              <td><span class="ch-status-pill pill-${s.status}">${s.status}</span></td>
+              <td>
+                <button class="btn btn-sm text-primary" onclick='openStudentModal(${JSON.stringify(s)})'><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm text-danger" onclick="deleteStudent(${s.student_id})"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>`,
+            )
+            .join("")}</tbody>
+        </table>`;
+        } catch (err) {
+          box.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      function openStudentModal(student = null) {
+        document.getElementById("studentForm").reset();
+        document.getElementById("stuId").value = student
+          ? student.student_id
+          : "";
+        document.getElementById("studentModalTitle").textContent = student
+          ? "Edit Student"
+          : "Add Student";
+        document.getElementById("stuName").value = student ? student.name : "";
+        document.getElementById("stuRoll").value = student
+          ? student.roll_number
+          : "";
+        document.getElementById("stuRoll").disabled = !!student;
+        document.getElementById("stuEmail").value = student
+          ? student.email
+          : "";
+        document.getElementById("stuPhone").value = student
+          ? student.phone
+          : "";
+        document.getElementById("stuBranch").value = student
+          ? student.branch
+          : "CSE";
+        document.getElementById("stuSemester").value = student
+          ? student.semester
+          : 1;
+        document.getElementById("stuPasswordGroup").style.display = student
+          ? "none"
+          : "block";
+        document.getElementById("stuPassword").required = !student;
+        document.getElementById("stuStatusGroup").style.display = student
+          ? "block"
+          : "none";
+        if (student)
+          document.getElementById("stuStatus").value = student.status;
+        new bootstrap.Modal(document.getElementById("studentModal")).show();
+      }
+
+      document
+        .getElementById("studentForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id = document.getElementById("stuId").value;
+          const payload = {
+            name: document.getElementById("stuName").value,
+            email: document.getElementById("stuEmail").value,
+            phone: document.getElementById("stuPhone").value,
+            branch: document.getElementById("stuBranch").value,
+            semester: document.getElementById("stuSemester").value,
+          };
+          if (!id) {
+            payload.roll_number = document.getElementById("stuRoll").value;
+            payload.password = document.getElementById("stuPassword").value;
+          } else {
+            payload.status = document.getElementById("stuStatus").value;
+            const pw = document.getElementById("stuPassword").value;
+            if (pw) payload.password = pw;
+          }
+          try {
+            if (id) await ChAPI.put(`/students/${id}`, payload);
+            else await ChAPI.post("/students", payload);
+            ChUtils.toast(
+              `Student ${id ? "updated" : "created"} successfully!`,
+              "success",
+            );
+            bootstrap.Modal.getInstance(
+              document.getElementById("studentModal"),
+            ).hide();
+            loadStudentsTable();
+          } catch (err) {
+            ChUtils.toast(err.message, "error");
+          }
+        });
+
+      async function deleteStudent(id) {
+        if (
+          !ChUtils.confirmAction(
+            "Delete this student? This will also remove their attendance and ranking records.",
+          )
+        )
+          return;
+        try {
+          await ChAPI.delete(`/students/${id}`);
+          ChUtils.toast("Student deleted.", "success");
+          loadStudentsTable();
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        }
+      }
+
+      // ---------------- MANAGE CRs ----------------
+      async function renderCRs() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" onclick="openCRModal()"><i class="bi bi-person-plus me-2"></i>Add CR</button>
+      </div>
+      <div class="ch-panel"><div class="ch-table-wrap" id="crsTableBox"></div></div>`;
+        await loadCRsTable();
+      }
+
+      async function loadCRsTable() {
+        const box = document.getElementById("crsTableBox");
+        box.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>`;
+        try {
+          const res = await ChAPI.get("/cr");
+          if (!res.crs || res.crs.length === 0) {
+            box.innerHTML = ChUtils.emptyState(
+              "bi-person-badge",
+              "No CR accounts created yet.",
+            );
+            return;
+          }
+          box.innerHTML = `
+        <table class="table-ch">
+          <thead><tr><th>Name</th><th>Roll No</th><th>Email</th><th>Branch/Sem</th><th>Class Strength</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${res.crs
+            .map(
+              (c) => `
+            <tr>
+              <td class="fw-semibold">${ChUtils.escapeHtml(c.name)}</td>
+              <td>${c.roll_number}</td>
+              <td>${ChUtils.escapeHtml(c.email)}</td>
+              <td>${c.branch} / Sem ${c.semester}</td>
+              <td>${c.class_strength}</td>
+              <td><span class="ch-status-pill pill-${c.status}">${c.status}</span></td>
+              <td>
+                <button class="btn btn-sm text-primary" onclick='openCRModal(${JSON.stringify(c)})'><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm text-danger" onclick="deleteCR(${c.cr_id})"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>`,
+            )
+            .join("")}</tbody>
+        </table>`;
+        } catch (err) {
+          box.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      function openCRModal(cr = null) {
+        document.getElementById("crForm").reset();
+        document.getElementById("crId").value = cr ? cr.cr_id : "";
+        document.getElementById("crModalTitle").textContent = cr
+          ? "Edit CR"
+          : "Add CR";
+        document.getElementById("crName").value = cr ? cr.name : "";
+        document.getElementById("crRoll").value = cr ? cr.roll_number : "";
+        document.getElementById("crRoll").disabled = !!cr;
+        document.getElementById("crEmail").value = cr ? cr.email : "";
+        document.getElementById("crPhone").value = cr ? cr.phone : "";
+        document.getElementById("crBranch").value = cr ? cr.branch : "CSE";
+        document.getElementById("crSemester").value = cr ? cr.semester : 1;
+        document.getElementById("crStrength").value = cr
+          ? cr.class_strength
+          : 60;
+        document.getElementById("crPasswordGroup").style.display = cr
+          ? "none"
+          : "block";
+        document.getElementById("crPassword").required = !cr;
+        document.getElementById("crStatusGroup").style.display = cr
+          ? "block"
+          : "none";
+        if (cr) document.getElementById("crStatus").value = cr.status;
+        new bootstrap.Modal(document.getElementById("crModal")).show();
+      }
+
+      document
+        .getElementById("crForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id = document.getElementById("crId").value;
+          const payload = {
+            name: document.getElementById("crName").value,
+            email: document.getElementById("crEmail").value,
+            phone: document.getElementById("crPhone").value,
+            branch: document.getElementById("crBranch").value,
+            semester: document.getElementById("crSemester").value,
+            class_strength: document.getElementById("crStrength").value,
+          };
+          if (!id) {
+            payload.roll_number = document.getElementById("crRoll").value;
+            payload.password = document.getElementById("crPassword").value;
+          } else {
+            payload.status = document.getElementById("crStatus").value;
+            const pw = document.getElementById("crPassword").value;
+            if (pw) payload.password = pw;
+          }
+          try {
+            if (id) await ChAPI.put(`/cr/${id}`, payload);
+            else await ChAPI.post("/cr", payload);
+            ChUtils.toast(
+              `CR ${id ? "updated" : "created"} successfully!`,
+              "success",
+            );
+            bootstrap.Modal.getInstance(
+              document.getElementById("crModal"),
+            ).hide();
+            loadCRsTable();
+          } catch (err) {
+            ChUtils.toast(err.message, "error");
+          }
+        });
+
+      async function deleteCR(id) {
+        if (!ChUtils.confirmAction("Delete this CR account?")) return;
+        try {
+          await ChAPI.delete(`/cr/${id}`);
+          ChUtils.toast("CR deleted.", "success");
+          loadCRsTable();
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        }
+      }
+
+      // ---------------- ATTENDANCE PERCENTAGE ----------------
+      async function renderAttendancePercentages() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `<div class="ch-panel"><div class="ch-table-wrap" id="attPercTableBox"></div></div>`;
+        const box = document.getElementById("attPercTableBox");
+        box.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>`;
+        try {
+          const res = await ChAPI.get("/attendance/percentage/all");
+          box.innerHTML = `
+        <table class="table-ch">
+          <thead><tr><th>Name</th><th>Roll No</th><th>Total Classes</th><th>Attended</th><th>Percentage</th><th>Actions</th></tr></thead>
+          <tbody>${res.records
+            .map(
+              (r) => `
+            <tr>
+              <td class="fw-semibold">${ChUtils.escapeHtml(r.name)}</td>
+              <td>${r.roll_number}</td>
+              <td>${r.total_classes}</td>
+              <td>${r.attended_classes}</td>
+              <td><span class="ch-status-pill ${r.percentage >= 75 ? "pill-present" : "pill-absent"}">${r.percentage}%</span></td>
+              <td><button class="btn btn-sm btn-ch-outline py-1 px-2" onclick='openAttPercModal(${JSON.stringify(r)})'><i class="bi bi-pencil me-1"></i>Update</button></td>
+            </tr>`,
+            )
+            .join("")}</tbody>
+        </table>`;
+        } catch (err) {
+          box.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      function openAttPercModal(r) {
+        document.getElementById("apStudentId").value = r.student_id;
+        document.getElementById("apStudentName").textContent =
+          `${r.name} (${r.roll_number})`;
+        document.getElementById("apTotal").value = r.total_classes;
+        document.getElementById("apAttended").value = r.attended_classes;
+        new bootstrap.Modal(document.getElementById("attPercModal")).show();
+      }
+
+      document
+        .getElementById("attPercForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            await ChAPI.post("/attendance/percentage", {
+              student_id: document.getElementById("apStudentId").value,
+              total_classes: document.getElementById("apTotal").value,
+              attended_classes: document.getElementById("apAttended").value,
+            });
+            ChUtils.toast("Attendance percentage updated!", "success");
+            bootstrap.Modal.getInstance(
+              document.getElementById("attPercModal"),
+            ).hide();
+            renderAttendancePercentages();
+          } catch (err) {
+            ChUtils.toast(err.message, "error");
+          }
+        });
+
+      // ---------------- RANKING ----------------
+      async function openRankingModal() {
+        try {
+          const res = await ChAPI.get("/students");
+          const select = document.getElementById("rankStudentSelect");
+          select.innerHTML = res.students
+            .map(
+              (s) =>
+                `<option value="${s.student_id}">${s.name} (${s.roll_number})</option>`,
+            )
+            .join("");
+          new bootstrap.Modal(document.getElementById("rankingModal")).show();
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        }
+      }
+
+      // ---------------- SCHEDULE ----------------
+      function renderScheduleSection() {
+        document.getElementById("chContent").innerHTML =
+          `<div id="weeklyScheduleContainer"></div>`;
+        ModSchedule.renderWeekly("weeklyScheduleContainer", true);
+      }
+
+      // ---------------- NOTICES ----------------
+      function renderNoticesSection() {
+        document.getElementById("chContent").innerHTML = `
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-ch-primary" data-bs-toggle="modal" data-bs-target="#noticeModal"><i class="bi bi-plus-lg me-2"></i>Post Notice</button>
+      </div>
+      <div id="noticesBox"></div>`;
+        ModNotices.render("noticesBox", true, window.user.id, "admin");
+      }
+
+      // ---------------- FEEDBACK ----------------
+      async function renderFeedback() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `<div class="ch-panel"><div class="ch-table-wrap" id="feedbackTableBox"></div></div>`;
+        const box = document.getElementById("feedbackTableBox");
+        box.innerHTML = `<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>`;
+        try {
+          const res = await ChAPI.get("/feedback");
+          if (!res.feedback || res.feedback.length === 0) {
+            box.innerHTML = ChUtils.emptyState(
+              "bi-chat-square-heart",
+              "No feedback submitted yet.",
+            );
+            return;
+          }
+          box.innerHTML = `
+        <table class="table-ch">
+          <thead><tr><th>Student</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${res.feedback
+            .map(
+              (f) => `
+            <tr>
+              <td class="fw-semibold">${ChUtils.escapeHtml(f.student_name)}<br><span class="small" style="color:var(--ch-text-muted)">${f.roll_number}</span></td>
+              <td>${ChUtils.escapeHtml(f.subject)}</td>
+              <td style="max-width:280px;">${ChUtils.escapeHtml(f.message)}</td>
+              <td>${ChUtils.formatDate(f.submitted_at)}</td>
+              <td><span class="ch-status-pill pill-${f.status}">${f.status}</span></td>
+              <td>${f.status === "unread" ? `<button class="btn btn-sm btn-ch-outline py-1 px-2" onclick="markFeedbackRead(${f.feedback_id})">Mark Read</button>` : '<i class="bi bi-check2-all text-success"></i>'}</td>
+            </tr>`,
+            )
+            .join("")}</tbody>
+        </table>`;
+        } catch (err) {
+          box.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      async function markFeedbackRead(id) {
+        try {
+          await ChAPI.put(`/feedback/${id}/read`);
+          ChUtils.toast("Marked as read.", "success");
+          renderFeedback();
+          refreshFeedbackBadge();
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        }
+      }
+
+      // ---------------- CONTACT INFO ----------------
+      async function renderContactSection() {
+        const content = document.getElementById("chContent");
+        try {
+          const res = await ChAPI.get("/contact");
+          const c = res.contact;
+          content.innerHTML = `
+        <div class="ch-panel">
+          <div class="ch-panel-header"><h5><i class="bi bi-envelope me-2"></i>Public Contact Information</h5>
+            <button class="btn btn-sm btn-ch-primary" onclick="openContactModal()"><i class="bi bi-pencil me-1"></i>Edit</button>
+          </div>
+          <div class="ch-panel-body">
+            ${
+              c
+                ? `
+            <div class="row g-3">
+              <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-person-badge text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Admin Name</div><div class="fw-semibold">${ChUtils.escapeHtml(c.admin_name)}</div></div></div></div>
+              <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-envelope text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Email</div><div class="fw-semibold">${ChUtils.escapeHtml(c.email)}</div></div></div></div>
+              <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-telephone text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Phone</div><div class="fw-semibold">${ChUtils.escapeHtml(c.phone)}</div></div></div></div>
+              <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-building text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">College</div><div class="fw-semibold">${ChUtils.escapeHtml(c.college_name)}</div></div></div></div>
+              <div class="col-12"><div class="ch-list-item"><i class="bi bi-geo-alt text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Address</div><div class="fw-semibold">${ChUtils.escapeHtml(c.address || "Not set")}</div></div></div></div>
+            </div>`
+                : ChUtils.emptyState(
+                    "bi-envelope",
+                    "Contact info not set yet. Click Edit to add it.",
+                  )
+            }
+          </div>
+        </div>`;
+          window._contactData = c;
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      function openContactModal() {
+        const c = window._contactData;
+        document.getElementById("cfAdminName").value = c ? c.admin_name : "";
+        document.getElementById("cfEmail").value = c ? c.email : "";
+        document.getElementById("cfPhone").value = c ? c.phone : "";
+        document.getElementById("cfCollegeName").value = c
+          ? c.college_name
+          : "";
+        document.getElementById("cfAddress").value = c ? c.address || "" : "";
+        new bootstrap.Modal(document.getElementById("contactModal")).show();
+      }
+
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          try {
+            await ChAPI.put("/contact", {
+              admin_name: document.getElementById("cfAdminName").value,
+              email: document.getElementById("cfEmail").value,
+              phone: document.getElementById("cfPhone").value,
+              college_name: document.getElementById("cfCollegeName").value,
+              address: document.getElementById("cfAddress").value,
+            });
+            ChUtils.toast("Contact info updated!", "success");
+            bootstrap.Modal.getInstance(
+              document.getElementById("contactModal"),
+            ).hide();
+            renderContactSection();
+          } catch (err) {
+            ChUtils.toast(err.message, "error");
+          }
+        });
+
+      // ---------------- PROFILE ----------------
+      async function renderProfile() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `
+      <div class="ch-profile-header mb-4">
+        ${ChShell.avatarHTML(window.user, "lg")}
+        <div>
+          <h4 class="fw-bold text-white mb-1">${ChUtils.escapeHtml(window.user.name)}</h4>
+          <p class="text-white-50 mb-0">${window.user.email} • System Administrator</p>
+        </div>
+      </div>
+      <div class="ch-panel">
+        <div class="ch-panel-body">
+          <p style="color:var(--ch-text-muted)">Admin profile editing (name, contact) is managed via the database seed for security in this version. Use the Contact Info section to update the public-facing admin details shown to students.</p>
+          <button class="btn btn-ch-outline" onclick="loadSection('contact')"><i class="bi bi-envelope me-2"></i>Go to Contact Info</button>
+        </div>
+      </div>`;
+      }
+    </script>
+  </body>
+</html>

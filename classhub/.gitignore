@@ -1,0 +1,15 @@
+node_modules/
+.env
+*.log
+.DS_Store
+Thumbs.db
+
+# Keep upload folder structure but ignore uploaded content
+backend/uploads/notes/*
+backend/uploads/assignments/*
+backend/uploads/projects/*
+backend/uploads/profile/*
+!backend/uploads/notes/.gitkeep
+!backend/uploads/assignments/.gitkeep
+!backend/uploads/projects/.gitkeep
+!backend/uploads/profile/.gitkeep

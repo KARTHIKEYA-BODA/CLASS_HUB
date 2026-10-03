@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – ClassHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <a
+      class="ch-home-close"
+      href="index.html"
+      aria-label="Return to home"
+      title="Return to home"
+    >
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </a>
+    <button
+      class="ch-theme-toggle position-fixed top-0 end-0 m-3"
+      style="z-index: 1050"
+    >
+      <i class="ch-theme-icon bi bi-moon-stars-fill"></i>
+    </button>
+
+    <div class="ch-auth-wrapper">
+      <div class="ch-auth-card ch-fade-in">
+        <div class="text-center mb-4">
+          <a
+            href="index.html"
+            class="d-inline-flex align-items-center gap-2 text-decoration-none mb-2"
+          >
+            <span class="ch-logo-badge"
+              ><i class="bi bi-mortarboard-fill"></i
+            ></span>
+            <span class="fw-bold fs-4" style="color: var(--ch-text)"
+              >ClassHub</span
+            >
+          </a>
+          <h4 class="fw-bold mb-1">Welcome Back!</h4>
+          <p class="small" style="color: var(--ch-text-muted)">
+            Login to access your dashboard
+          </p>
+        </div>
+
+        <div id="expiredAlert" class="alert alert-warning small py-2 d-none">
+          <i class="bi bi-exclamation-triangle me-1"></i> Your session expired.
+          Please login again.
+        </div>
+
+        <div class="ch-role-tabs">
+          <button class="ch-role-tab active" data-role="student">
+            Student
+          </button>
+          <button class="ch-role-tab" data-role="cr">CR</button>
+          <button class="ch-role-tab" data-role="admin">Admin</button>
+        </div>
+
+        <form id="loginForm">
+          <!-- Roll Number field (Student / CR) -->
+          <div class="mb-3" id="rollNumberGroup">
+            <label class="form-label">Roll Number</label>
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="bi bi-person-vcard"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control"
+                id="rollNumberInput"
+                placeholder="e.g. CSE21001"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Email field (Admin only) -->
+          <div class="mb-3 d-none" id="emailGroup">
+            <label class="form-label">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="bi bi-envelope"></i
+              ></span>
+              <input
+                type="email"
+                class="form-control"
+                id="emailInput"
+                placeholder="admin@classhub.edu"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                id="passwordInput"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                class="btn btn-ch-outline"
+                type="button"
+                id="togglePassword"
+                style="border-radius: 0 10px 10px 0"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="loginError"
+            class="alert alert-danger small py-2 d-none"
+          ></div>
+
+          <button
+            type="submit"
+            class="btn btn-ch-primary w-100 py-2 mb-3"
+            id="loginBtn"
+          >
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+          </button>
+
+          <p class="text-center small mb-0" style="color: var(--ch-text-muted)">
+            Don't have an account?
+            <a
+              href="register.html"
+              class="fw-bold"
+              style="color: var(--ch-primary)"
+              >Register here</a
+            >
+          </p>
+          <p class="text-center small mt-2">
+            <a href="index.html" style="color: var(--ch-text-muted)"
+              ><i class="bi bi-arrow-left me-1"></i>Back to Home</a
+            >
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div id="chToastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+      // Redirect if already logged in
+      if (ChAuth.isLoggedIn()) {
+        const user = ChAuth.getUser();
+        window.location.href = `${user.role}/dashboard.html`;
+      }
+
+      // Show "session expired" message if redirected here
+      if (new URLSearchParams(window.location.search).get("expired") === "1") {
+        document.getElementById("expiredAlert").classList.remove("d-none");
+      }
+
+      let selectedRole = "student";
+
+      document.querySelectorAll(".ch-role-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document
+            .querySelectorAll(".ch-role-tab")
+            .forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          selectedRole = tab.dataset.role;
+
+          const rollGroup = document.getElementById("rollNumberGroup");
+          const emailGroup = document.getElementById("emailGroup");
+          const rollInput = document.getElementById("rollNumberInput");
+          const emailInput = document.getElementById("emailInput");
+
+          if (selectedRole === "admin") {
+            rollGroup.classList.add("d-none");
+            emailGroup.classList.remove("d-none");
+            rollInput.required = false;
+            emailInput.required = true;
+          } else {
+            rollGroup.classList.remove("d-none");
+            emailGroup.classList.add("d-none");
+            rollInput.required = true;
+            emailInput.required = false;
+          }
+          document.getElementById("loginError").classList.add("d-none");
+        });
+      });
+
+      document
+        .getElementById("togglePassword")
+        .addEventListener("click", function () {
+          const input = document.getElementById("passwordInput");
+          const icon = this.querySelector("i");
+          if (input.type === "password") {
+            input.type = "text";
+            icon.className = "bi bi-eye-slash";
+          } else {
+            input.type = "password";
+            icon.className = "bi bi-eye";
+          }
+        });
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const errorBox = document.getElementById("loginError");
+          errorBox.classList.add("d-none");
+
+          const password = document.getElementById("passwordInput").value;
+          let endpoint, payload;
+
+          if (selectedRole === "admin") {
+            const email = document.getElementById("emailInput").value.trim();
+            endpoint = "/auth/admin/login";
+            payload = { email, password };
+          } else {
+            const roll_number = document
+              .getElementById("rollNumberInput")
+              .value.trim();
+            endpoint =
+              selectedRole === "student"
+                ? "/auth/student/login"
+                : "/auth/cr/login";
+            payload = { roll_number, password };
+          }
+
+          const btn = document.getElementById("loginBtn");
+          btn.disabled = true;
+          btn.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+
+          try {
+            const res = await ChAPI.post(endpoint, payload);
+            ChAuth.setSession(res.token, res.user);
+            ChUtils.toast(`Welcome back, ${res.user.name}!`, "success");
+            setTimeout(() => {
+              window.location.href = `${res.user.role}/dashboard.html`;
+            }, 600);
+          } catch (err) {
+            errorBox.textContent = err.message;
+            errorBox.classList.remove("d-none");
+            btn.disabled = false;
+            btn.innerHTML =
+              '<i class="bi bi-box-arrow-in-right me-2"></i>Login';
+          }
+        });
+    </script>
+  </body>
+</html>

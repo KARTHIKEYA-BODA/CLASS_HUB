@@ -1,0 +1,275 @@
+/* ==========================================================================
+   ClassHub - Dashboard Stylesheet
+   Sidebar layout, stat cards, tables, modals for Student/CR/Admin panels
+   ========================================================================== */
+
+.ch-app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------------------------------------------------------------- */
+/* Sidebar                                                            */
+/* ---------------------------------------------------------------- */
+.ch-sidebar {
+  width: var(--ch-sidebar-w);
+  background: var(--ch-surface);
+  border-right: 1px solid var(--ch-border);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 1040;
+  display: flex;
+  flex-direction: column;
+  transition: transform .3s ease;
+  overflow-y: auto;
+}
+.ch-sidebar-brand {
+  display: flex; align-items: center; gap: .65rem;
+  padding: 1.35rem 1.4rem;
+  border-bottom: 1px solid var(--ch-border);
+}
+.ch-sidebar-brand span { font-weight: 800; font-size: 1.15rem; }
+.ch-sidebar-role {
+  margin: 1rem 1.4rem 0;
+  padding: .85rem 1rem;
+  background: var(--ch-surface-alt);
+  border-radius: 12px;
+  display: flex; align-items: center; gap: .75rem;
+}
+.ch-avatar-sm {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--ch-primary), var(--ch-accent));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: .95rem;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.ch-sidebar-role .name { font-weight: 700; font-size: .88rem; line-height: 1.2; }
+.ch-sidebar-role .role { font-size: .74rem; color: var(--ch-text-muted); text-transform: capitalize; }
+
+.ch-sidebar-nav { padding: 1.25rem .9rem; flex: 1; }
+.ch-nav-section-label {
+  font-size: .7rem; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--ch-text-muted); font-weight: 700;
+  padding: .5rem .6rem .35rem;
+}
+.ch-nav-link {
+  display: flex; align-items: center; gap: .8rem;
+  padding: .68rem .9rem;
+  border-radius: 10px;
+  color: var(--ch-text-muted);
+  font-weight: 600;
+  font-size: .92rem;
+  margin-bottom: .2rem;
+  cursor: pointer;
+  transition: all .18s ease;
+  border: none; background: transparent; width: 100%; text-align: left;
+}
+.ch-nav-link i { font-size: 1.05rem; width: 20px; text-align: center; }
+.ch-nav-link:hover { background: var(--ch-surface-alt); color: var(--ch-text); }
+.ch-nav-link.active {
+  background: linear-gradient(135deg, var(--ch-primary), var(--ch-primary-light));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79,70,229,.3);
+}
+.ch-sidebar-footer { padding: 1rem 1.4rem 1.4rem; border-top: 1px solid var(--ch-border); }
+
+.ch-sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  z-index: 1035;
+}
+
+/* ---------------------------------------------------------------- */
+/* Main content area                                                  */
+/* ---------------------------------------------------------------- */
+.ch-main {
+  margin-left: var(--ch-sidebar-w);
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 2rem;
+}
+.ch-topbar {
+  background: var(--ch-surface);
+  border-bottom: 1px solid var(--ch-border);
+  padding: 1rem 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 1020;
+  gap: 1rem;
+}
+.ch-topbar-title { font-weight: 800; font-size: 1.25rem; }
+.ch-topbar-title .subtitle { display:block; font-size: .8rem; font-weight: 500; color: var(--ch-text-muted); }
+.ch-hamburger {
+  display: none;
+  border: none; background: var(--ch-surface-alt);
+  width: 40px; height: 40px; border-radius: 10px;
+  align-items: center; justify-content: center;
+  color: var(--ch-text); font-size: 1.1rem;
+}
+.ch-content { padding: 1.75rem; }
+
+/* ---------------------------------------------------------------- */
+/* Stat / Dashboard cards                                            */
+/* ---------------------------------------------------------------- */
+.ch-stat-card {
+  background: var(--ch-surface);
+  border: 1px solid var(--ch-border);
+  border-radius: var(--ch-radius);
+  padding: 1.4rem;
+  box-shadow: var(--ch-shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+  height: 100%;
+}
+.ch-stat-card:hover { transform: translateY(-3px); box-shadow: var(--ch-shadow-lg); }
+.ch-stat-card .top-row { display: flex; align-items: flex-start; justify-content: space-between; }
+.ch-stat-card .stat-value { font-size: 1.9rem; font-weight: 800; margin: .5rem 0 .15rem; }
+.ch-stat-card .stat-label { color: var(--ch-text-muted); font-size: .86rem; font-weight: 600; }
+.ch-stat-card .trend { font-size: .78rem; font-weight: 700; }
+.trend-up { color: var(--ch-success); }
+.trend-down { color: var(--ch-danger); }
+
+.ch-panel {
+  background: var(--ch-surface);
+  border: 1px solid var(--ch-border);
+  border-radius: var(--ch-radius);
+  box-shadow: var(--ch-shadow);
+}
+.ch-panel-header {
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--ch-border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .75rem;
+}
+.ch-panel-header h5 { font-weight: 700; margin: 0; font-size: 1.02rem; }
+.ch-panel-body { padding: 1.4rem; }
+
+/* Progress ring for attendance % */
+.ch-progress-ring-wrap { display: flex; align-items: center; gap: 1.25rem; }
+.ch-progress-ring { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
+.ch-progress-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+.ch-progress-ring .ring-bg { fill: none; stroke: var(--ch-border); stroke-width: 9; }
+.ch-progress-ring .ring-fg { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset .8s ease; }
+.ch-progress-ring .ring-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.05rem;
+}
+
+/* ---------------------------------------------------------------- */
+/* Tables                                                             */
+/* ---------------------------------------------------------------- */
+.ch-table-wrap { overflow-x: auto; }
+.table-ch {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table-ch thead th {
+  background: var(--ch-surface-alt);
+  color: var(--ch-text-muted);
+  font-size: .76rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-weight: 700;
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--ch-border);
+  white-space: nowrap;
+}
+.table-ch tbody td {
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--ch-border);
+  font-size: .9rem;
+  vertical-align: middle;
+}
+.table-ch tbody tr:last-child td { border-bottom: none; }
+.table-ch tbody tr:hover { background: var(--ch-surface-alt); }
+.table-ch tbody tr.rank-1 td:first-child { color: #d97706; font-weight: 800; }
+.table-ch tbody tr.rank-2 td:first-child { color: #6b7280; font-weight: 800; }
+.table-ch tbody tr.rank-3 td:first-child { color: #b45309; font-weight: 800; }
+
+.ch-status-pill {
+  padding: .28em .75em;
+  border-radius: 20px;
+  font-size: .74rem;
+  font-weight: 700;
+}
+.pill-present, .pill-active, .pill-read { background: rgba(22,163,74,.12); color: var(--ch-success); }
+.pill-absent, .pill-inactive, .pill-unread { background: rgba(220,38,38,.12); color: var(--ch-danger); }
+.pill-warning { background: rgba(217,119,6,.12); color: var(--ch-warning); }
+
+/* Attendance take-grid */
+.ch-attendance-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--ch-border);
+  gap: 1rem; flex-wrap: wrap;
+}
+.ch-attendance-row:last-child { border-bottom: none; }
+.ch-toggle-btns { display: flex; gap: .4rem; }
+.ch-toggle-btn {
+  border: 1.5px solid var(--ch-border);
+  background: var(--ch-surface-alt);
+  padding: .4rem 1rem;
+  border-radius: 8px;
+  font-size: .82rem; font-weight: 700;
+  cursor: pointer; transition: all .15s ease;
+  color: var(--ch-text-muted);
+}
+.ch-toggle-btn.present.active { background: rgba(22,163,74,.15); border-color: var(--ch-success); color: var(--ch-success); }
+.ch-toggle-btn.absent.active { background: rgba(220,38,38,.15); border-color: var(--ch-danger); color: var(--ch-danger); }
+
+/* File / doc cards */
+.ch-file-card {
+  display: flex; align-items: center; gap: 1rem;
+  border: 1px solid var(--ch-border);
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--ch-surface);
+  transition: all .2s ease;
+}
+.ch-file-card:hover { box-shadow: var(--ch-shadow-lg); transform: translateY(-2px); }
+.ch-file-icon {
+  width: 46px; height: 46px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; flex-shrink: 0;
+}
+
+/* Modal theming (Bootstrap modal overrides) */
+.modal-content { background: var(--ch-surface); color: var(--ch-text); border: 1px solid var(--ch-border); border-radius: 16px; }
+.modal-header, .modal-footer { border-color: var(--ch-border); }
+.btn-close { filter: var(--bs-btn-close-filter, none); }
+[data-theme="dark"] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+
+/* Notice card */
+.ch-notice-card { border-left: 4px solid var(--ch-primary); }
+.ch-notice-card.important { border-left-color: var(--ch-danger); }
+
+/* Profile card */
+.ch-profile-header {
+  background: linear-gradient(135deg, var(--ch-primary), var(--ch-accent));
+  border-radius: var(--ch-radius);
+  padding: 2rem;
+  color: #fff;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.ch-profile-avatar {
+  width: 88px; height: 88px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  border: 3px solid rgba(255,255,255,.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.1rem; font-weight: 800;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .ch-sidebar { transform: translateX(-100%); }
+  .ch-sidebar.show { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,.3); }
+  .ch-main { margin-left: 0; }
+  .ch-hamburger { display: flex; }
+  .ch-sidebar-overlay.show { display: block; }
+}
+@media (max-width: 575px) {
+  .ch-content { padding: 1.1rem; }
+  .ch-topbar { padding: .85rem 1.1rem; }
+  .ch-profile-header { padding: 1.4rem; text-align: center; justify-content: center; }
+}

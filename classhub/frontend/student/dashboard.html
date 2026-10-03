@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard – ClassHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+  </head>
+  <body>
+    <div id="chDashboardRoot"></div>
+
+    <!-- Feedback Modal -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="feedbackForm">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-chat-square-heart me-2"></i>Submit Feedback
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Subject</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="feedbackSubject"
+                  placeholder="e.g. Suggestion for Notes Module"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Message</label>
+                <textarea
+                  class="form-control"
+                  id="feedbackMessage"
+                  rows="4"
+                  placeholder="Share your thoughts, suggestions, or concerns..."
+                  required
+                ></textarea>
+              </div>
+              <p class="small mb-0" style="color: var(--ch-text-muted)">
+                <i class="bi bi-lock me-1"></i>Only Admin can view your
+                feedback.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-ch-outline"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-ch-primary"
+                id="feedbackSubmitBtn"
+              >
+                <i class="bi bi-send me-2"></i>Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js?v=2"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/shell.js?v=3"></script>
+    <script src="../js/modules/schedule.js"></script>
+    <script src="../js/modules/notes.js"></script>
+    <script src="../js/modules/assignments.js"></script>
+    <script src="../js/modules/projects.js"></script>
+    <script src="../js/modules/ranking-notices.js"></script>
+    <script>
+      const user = ChAuth.guard("student");
+      if (user) initStudentDashboard();
+
+      function studentNavItems() {
+        return [
+          {
+            key: "overview",
+            section: "Main",
+            icon: "bi-grid-1x2-fill",
+            label: "Overview",
+          },
+          {
+            key: "schedule",
+            section: "Main",
+            icon: "bi-calendar3",
+            label: "Today's Schedule",
+          },
+          {
+            key: "attendance",
+            section: "Main",
+            icon: "bi-calendar-check",
+            label: "Attendance",
+          },
+          {
+            key: "notes",
+            section: "Academics",
+            icon: "bi-journal-richtext",
+            label: "Notes",
+          },
+          {
+            key: "assignments",
+            section: "Academics",
+            icon: "bi-clipboard2-data",
+            label: "Assignments",
+          },
+          {
+            key: "projects",
+            section: "Academics",
+            icon: "bi-kanban",
+            label: "Projects",
+          },
+          {
+            key: "ranking",
+            section: "Academics",
+            icon: "bi-trophy",
+            label: "Semester Ranking",
+          },
+          {
+            key: "notices",
+            section: "Community",
+            icon: "bi-megaphone",
+            label: "Notice Board",
+          },
+          {
+            key: "feedback",
+            section: "Community",
+            icon: "bi-chat-square-heart",
+            label: "Feedback",
+          },
+          {
+            key: "profile",
+            section: "Account",
+            icon: "bi-person-circle",
+            label: "My Profile",
+          },
+          {
+            key: "about",
+            section: "Account",
+            icon: "bi-info-circle",
+            label: "About",
+          },
+          {
+            key: "contact",
+            section: "Account",
+            icon: "bi-envelope",
+            label: "Contact Us",
+          },
+        ];
+      }
+
+      function initStudentDashboard() {
+        ChShell.render({
+          role: "student",
+          user,
+          navItems: studentNavItems(),
+          activeKey: "overview",
+          pageTitle: `Welcome, ${user.name.split(" ")[0]}! 👋`,
+          pageSubtitle: `Roll No: ${user.roll_number}`,
+        });
+        loadSection("overview");
+      }
+
+      async function loadSection(key) {
+        document
+          .querySelectorAll(".ch-nav-link")
+          .forEach((el) => el.classList.remove("active"));
+        document.querySelector(`[data-nav="${key}"]`)?.classList.add("active");
+        ChShell.closeSidebar();
+
+        const titles = {
+          overview: ["Dashboard Overview", "Your academic snapshot"],
+          schedule: ["Today's Schedule", "Subject, faculty, time & room"],
+          attendance: ["My Attendance", "Uploaded by Admin"],
+          notes: ["Notes", "View & download class notes"],
+          assignments: ["Assignments", "Track deadlines & submissions"],
+          projects: ["Projects", "Assigned project work"],
+          ranking: ["Semester Ranking", "SGPA / CGPA based ranking"],
+          notices: ["Notice Board", "Latest announcements"],
+          feedback: ["Feedback", "Share your thoughts with Admin"],
+          profile: ["My Profile", "Manage your account"],
+          about: ["About ClassHub", "Project & platform information"],
+          contact: ["Contact Us", "Reach the college administration"],
+        };
+        document.querySelector(".ch-topbar-title").innerHTML =
+          `${titles[key][0]}<span class="subtitle">${titles[key][1]}</span>`;
+
+        const content = document.getElementById("chContent");
+        content.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>`;
+
+        switch (key) {
+          case "overview":
+            return renderOverview();
+          case "schedule":
+            content.innerHTML = `<div id="todayScheduleBox"></div>`;
+            return ModSchedule.renderToday("todayScheduleBox");
+          case "attendance":
+            return renderAttendance();
+          case "notes":
+            return renderNotesSection();
+          case "assignments":
+            content.innerHTML = `<div id="assignmentsBox"></div>`;
+            return ModAssignments.render("assignmentsBox", false);
+          case "projects":
+            content.innerHTML = `<div id="projectsBox"></div>`;
+            return ModProjects.render("projectsBox", false);
+          case "ranking":
+            content.innerHTML = `<div class="ch-panel"><div class="ch-panel-body" id="rankingBox"></div></div>`;
+            return ModRanking.render("rankingBox", false);
+          case "notices":
+            return renderNoticesSection();
+          case "feedback":
+            return renderFeedbackSection();
+          case "profile":
+            return renderProfile();
+          case "about":
+            return renderAbout();
+          case "contact":
+            return renderContact();
+        }
+      }
+
+      // ---------------- OVERVIEW ----------------
+      async function renderOverview() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `
+      <div class="row g-3 mb-4" id="statCardsRow">
+        <div class="col-12 text-center py-3"><div class="spinner-border text-primary"></div></div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="ch-panel mb-4">
+            <div class="ch-panel-header"><h5><i class="bi bi-calendar3 me-2"></i>Today's Schedule</h5></div>
+            <div class="ch-panel-body" id="ovSchedule"></div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="ch-panel">
+            <div class="ch-panel-header"><h5><i class="bi bi-megaphone me-2"></i>Recent Notices</h5></div>
+            <div class="ch-panel-body" id="ovNotices"></div>
+          </div>
+        </div>
+      </div>`;
+
+        ModSchedule.renderToday("ovSchedule");
+
+        try {
+          const [percRes, rankRes, noticesRes] = await Promise.all([
+            ChAPI.get("/attendance/my-percentage"),
+            ChAPI.get("/ranking"),
+            ChAPI.get("/notices?limit=4"),
+          ]);
+
+          const myRank = (rankRes.ranking || []).find(
+            (r) => r.roll_number === user.roll_number,
+          );
+          const perc = percRes.percentage.percentage || 0;
+
+          document.getElementById("statCardsRow").innerHTML = `
+        <div class="col-md-4">
+          <div class="ch-stat-card">
+            <div class="ch-progress-ring-wrap">
+              <div class="ch-progress-ring">
+                <svg viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="42"></circle>
+                  <circle class="ring-fg" cx="50" cy="50" r="42" stroke="${perc >= 75 ? "#16a34a" : perc >= 60 ? "#d97706" : "#dc2626"}"
+                    stroke-dasharray="264" stroke-dashoffset="${264 - (264 * perc) / 100}"></circle>
+                </svg>
+                <div class="ring-text">${perc}%</div>
+              </div>
+              <div>
+                <div class="stat-label mb-1">Attendance</div>
+                <div class="fw-bold">${percRes.percentage.attended_classes}/${percRes.percentage.total_classes} classes</div>
+                <span class="ch-status-pill ${perc >= 75 ? "pill-present" : "pill-absent"} mt-1 d-inline-block">${perc >= 75 ? "Good Standing" : "Below 75%"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ch-stat-card">
+            <div class="top-row">
+              <div class="ch-icon-box bg-soft-warning mb-0"><i class="bi bi-trophy"></i></div>
+            </div>
+            <div class="stat-value">${myRank ? "#" + myRank.rank_no : "—"}</div>
+            <div class="stat-label">Semester Rank ${myRank ? `(SGPA ${myRank.sgpa})` : "(Not uploaded)"}</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ch-stat-card">
+            <div class="top-row">
+              <div class="ch-icon-box bg-soft-info mb-0"><i class="bi bi-megaphone"></i></div>
+            </div>
+            <div class="stat-value">${noticesRes.count}</div>
+            <div class="stat-label">Active Notices</div>
+          </div>
+        </div>`;
+
+          const ov = document.getElementById("ovNotices");
+          if (!noticesRes.notices || noticesRes.notices.length === 0) {
+            ov.innerHTML = ChUtils.emptyState(
+              "bi-megaphone",
+              "No notices yet.",
+            );
+          } else {
+            ov.innerHTML = noticesRes.notices
+              .map(
+                (n) => `
+          <div class="d-flex gap-2 mb-3 pb-3" style="border-bottom:1px solid var(--ch-border)">
+            <div class="ch-icon-box ${n.is_important ? "bg-soft-danger" : "bg-soft-primary"} mb-0" style="width:38px;height:38px;font-size:1rem;flex-shrink:0;"><i class="bi bi-megaphone-fill"></i></div>
+            <div class="min-w-0">
+              <div class="fw-semibold small text-truncate">${ChUtils.escapeHtml(n.title)}</div>
+              <div class="small text-truncate" style="color:var(--ch-text-muted)">${ChUtils.escapeHtml(n.description)}</div>
+              <div style="font-size:.72rem; color:var(--ch-text-muted)">${ChUtils.timeAgo(n.posted_date)}</div>
+            </div>
+          </div>`,
+              )
+              .join("");
+          }
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        }
+      }
+
+      // ---------------- ATTENDANCE ----------------
+      async function renderAttendance() {
+        const content = document.getElementById("chContent");
+        try {
+          const res = await ChAPI.get("/attendance/my-percentage");
+          const p = res.percentage;
+          const perc = p.percentage || 0;
+          content.innerHTML = `
+        <div class="ch-panel">
+          <div class="ch-panel-body">
+            <div class="row align-items-center g-4">
+              <div class="col-md-4 text-center">
+                <div class="ch-progress-ring mx-auto" style="width:160px;height:160px;">
+                  <svg viewBox="0 0 100 100">
+                    <circle class="ring-bg" cx="50" cy="50" r="42"></circle>
+                    <circle class="ring-fg" cx="50" cy="50" r="42" stroke="${perc >= 75 ? "#16a34a" : perc >= 60 ? "#d97706" : "#dc2626"}"
+                      stroke-dasharray="264" stroke-dashoffset="${264 - (264 * perc) / 100}"></circle>
+                  </svg>
+                  <div class="ring-text" style="font-size:1.6rem;">${perc}%</div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <h5 class="fw-bold mb-3">Overall Attendance</h5>
+                <div class="row g-3 mb-3">
+                  <div class="col-6">
+                    <div class="p-3 rounded-3" style="background:var(--ch-surface-alt);">
+                      <div class="small" style="color:var(--ch-text-muted)">Total Classes</div>
+                      <div class="fw-bold fs-4">${p.total_classes}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-3 rounded-3" style="background:var(--ch-surface-alt);">
+                      <div class="small" style="color:var(--ch-text-muted)">Attended</div>
+                      <div class="fw-bold fs-4">${p.attended_classes}</div>
+                    </div>
+                  </div>
+                </div>
+                ${
+                  perc < 75
+                    ? `<div class="alert alert-warning small mb-0"><i class="bi bi-exclamation-triangle me-1"></i>Your attendance is below the 75% requirement. Please attend classes regularly.</div>`
+                    : `<div class="alert alert-success small mb-0"><i class="bi bi-check-circle me-1"></i>Great! You're maintaining healthy attendance.</div>`
+                }
+                <p class="small mt-3 mb-0" style="color:var(--ch-text-muted)"><i class="bi bi-shield-lock me-1"></i>This percentage is uploaded and verified by Admin. It cannot be edited by students.</p>
+                ${p.updated_at ? `<p class="small mb-0" style="color:var(--ch-text-muted)">Last updated: ${ChUtils.formatDateTime(p.updated_at)}</p>` : ""}
+              </div>
+            </div>
+          </div>
+        </div>`;
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      // ---------------- NOTES ----------------
+      function renderNotesSection() {
+        document.getElementById("chContent").innerHTML =
+          `<div id="notesBox"></div>`;
+        ModNotes.render("notesBox", false);
+      }
+
+      // ---------------- NOTICES ----------------
+      function renderNoticesSection() {
+        document.getElementById("chContent").innerHTML =
+          `<div id="noticesBox"></div>`;
+        ModNotices.render("noticesBox", false, user.id, user.role);
+      }
+
+      // ---------------- FEEDBACK ----------------
+      async function renderFeedbackSection() {
+        const content = document.getElementById("chContent");
+        content.innerHTML = `
+      <div class="ch-panel mb-4">
+        <div class="ch-panel-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h5 class="fw-bold mb-1"><i class="bi bi-chat-square-heart me-2"></i>Have something to share?</h5>
+            <p class="small mb-0" style="color:var(--ch-text-muted)">Submit feedback, suggestions, or concerns. Only Admin can view it.</p>
+          </div>
+          <button class="btn btn-ch-primary" data-bs-toggle="modal" data-bs-target="#feedbackModal"><i class="bi bi-plus-lg me-2"></i>New Feedback</button>
+        </div>
+      </div>
+      <div class="ch-panel"><div class="ch-panel-header"><h5>My Submitted Feedback</h5></div><div class="ch-panel-body" id="myFeedbackBox"></div></div>`;
+
+        try {
+          const res = await ChAPI.get("/feedback/my");
+          const box = document.getElementById("myFeedbackBox");
+          if (!res.feedback || res.feedback.length === 0) {
+            box.innerHTML = ChUtils.emptyState(
+              "bi-chat-square",
+              "You haven't submitted any feedback yet.",
+            );
+            return;
+          }
+          box.innerHTML = res.feedback
+            .map(
+              (f) => `
+        <div class="d-flex justify-content-between align-items-start mb-3 pb-3" style="border-bottom:1px solid var(--ch-border)">
+          <div>
+            <div class="fw-semibold small">${ChUtils.escapeHtml(f.subject)}</div>
+            <div class="small" style="color:var(--ch-text-muted)">${ChUtils.escapeHtml(f.message)}</div>
+            <div style="font-size:.72rem; color:var(--ch-text-muted)">${ChUtils.formatDateTime(f.submitted_at)}</div>
+          </div>
+          <span class="ch-status-pill ${f.status === "read" ? "pill-read" : "pill-unread"}">${f.status}</span>
+        </div>`,
+            )
+            .join("");
+        } catch (err) {
+          ChUtils.toast(err.message, "error");
+        }
+      }
+
+      document.addEventListener("submit", async (e) => {
+        if (e.target.id === "feedbackForm") {
+          e.preventDefault();
+          const btn = document.getElementById("feedbackSubmitBtn");
+          btn.disabled = true;
+          btn.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+          try {
+            await ChAPI.post("/feedback", {
+              subject: document.getElementById("feedbackSubject").value,
+              message: document.getElementById("feedbackMessage").value,
+            });
+            ChUtils.toast("Feedback submitted. Thank you!", "success");
+            bootstrap.Modal.getInstance(
+              document.getElementById("feedbackModal"),
+            ).hide();
+            document.getElementById("feedbackForm").reset();
+            renderFeedbackSection();
+          } catch (err) {
+            ChUtils.toast(err.message, "error");
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-send me-2"></i>Submit';
+          }
+        }
+      });
+
+      // ---------------- PROFILE ----------------
+      async function renderProfile() {
+        const content = document.getElementById("chContent");
+        try {
+          const res = await ChAPI.get("/students/profile");
+          const p = res.profile;
+          content.innerHTML = `
+        <div class="ch-profile-header mb-4">
+          ${ChShell.avatarHTML({ ...p, profile_image: p.profile_image }, "lg")}
+          <div>
+            <h4 class="fw-bold text-white mb-1">${ChUtils.escapeHtml(p.name)}</h4>
+            <p class="text-white-50 mb-0">${p.roll_number} • ${p.branch} • Semester ${p.semester}</p>
+          </div>
+        </div>
+        <div class="ch-panel">
+          <div class="ch-panel-header"><h5><i class="bi bi-pencil-square me-2"></i>Edit Profile</h5></div>
+          <div class="ch-panel-body">
+            <form id="profileForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="pfName" value="${ChUtils.escapeHtml(p.name)}" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Roll Number <span class="badge bg-secondary bg-opacity-25 text-secondary">Locked</span></label>
+                  <input type="text" class="form-control" value="${p.roll_number}" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-control" id="pfEmail" value="${ChUtils.escapeHtml(p.email)}" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" id="pfPhone" value="${ChUtils.escapeHtml(p.phone)}" pattern="[0-9]{10}" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">New Password <span class="small" style="color:var(--ch-text-muted)">(optional)</span></label>
+                  <input type="password" class="form-control" id="pfPassword" placeholder="Leave blank to keep current" minlength="6">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Profile Picture</label>
+                  <input type="file" class="form-control" id="pfImage" accept="image/*">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-ch-primary mt-4" id="profileSaveBtn"><i class="bi bi-check-lg me-2"></i>Save Changes</button>
+            </form>
+          </div>
+        </div>`;
+
+          document
+            .getElementById("profileForm")
+            .addEventListener("submit", async (e) => {
+              e.preventDefault();
+              const btn = document.getElementById("profileSaveBtn");
+              btn.disabled = true;
+              btn.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+              const fd = new FormData();
+              fd.append("name", document.getElementById("pfName").value);
+              fd.append("email", document.getElementById("pfEmail").value);
+              fd.append("phone", document.getElementById("pfPhone").value);
+              const pw = document.getElementById("pfPassword").value;
+              if (pw) fd.append("password", pw);
+              const imgFile = document.getElementById("pfImage").files[0];
+              if (imgFile) fd.append("profile_image", imgFile);
+
+              try {
+                const updateRes = await ChAPI.put("/students/profile", fd);
+                const updatedUser = { ...user, ...updateRes.profile };
+                localStorage.setItem("ch_user", JSON.stringify(updatedUser));
+                ChUtils.toast("Profile updated successfully!", "success");
+                setTimeout(() => window.location.reload(), 800);
+              } catch (err) {
+                ChUtils.toast(err.message, "error");
+                btn.disabled = false;
+                btn.innerHTML =
+                  '<i class="bi bi-check-lg me-2"></i>Save Changes';
+              }
+            });
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+
+      // ---------------- ABOUT ----------------
+      function renderAbout() {
+        document.getElementById("chContent").innerHTML = `
+      <div class="ch-panel">
+        <div class="ch-panel-body">
+          <h5 class="fw-bold mb-3">About ClassHub</h5>
+          <p style="color:var(--ch-text-muted)">ClassHub is a smart classroom management system built to centralize attendance, notes, assignments, projects, rankings, and communication for Students, Class Representatives, and Admins.</p>
+          <div class="row g-3 mt-2">
+            <div class="col-md-4"><div class="p-3 rounded-3" style="background:var(--ch-surface-alt)"><div class="small" style="color:var(--ch-text-muted)">Version</div><div class="fw-bold">1.0.0</div></div></div>
+            <div class="col-md-4"><div class="p-3 rounded-3" style="background:var(--ch-surface-alt)"><div class="small" style="color:var(--ch-text-muted)">Your Role</div><div class="fw-bold text-capitalize">Student</div></div></div>
+            <div class="col-md-4"><div class="p-3 rounded-3" style="background:var(--ch-surface-alt)"><div class="small" style="color:var(--ch-text-muted)">Security</div><div class="fw-bold">JWT + bcrypt</div></div></div>
+          </div>
+        </div>
+      </div>`;
+      }
+
+      // ---------------- CONTACT ----------------
+      async function renderContact() {
+        const content = document.getElementById("chContent");
+        try {
+          const res = await ChAPI.get("/contact");
+          const c = res.contact;
+          content.innerHTML = `
+        <div class="ch-panel"><div class="ch-panel-body">
+          ${
+            c
+              ? `
+          <div class="row g-3">
+            <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-person-badge text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Admin</div><div class="fw-semibold">${ChUtils.escapeHtml(c.admin_name)}</div></div></div></div>
+            <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-envelope text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Email</div><div class="fw-semibold">${ChUtils.escapeHtml(c.email)}</div></div></div></div>
+            <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-telephone text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">Phone</div><div class="fw-semibold">${ChUtils.escapeHtml(c.phone)}</div></div></div></div>
+            <div class="col-md-6"><div class="ch-list-item"><i class="bi bi-building text-primary fs-4"></i><div><div class="small" style="color:var(--ch-text-muted)">College</div><div class="fw-semibold">${ChUtils.escapeHtml(c.college_name)}</div></div></div></div>
+          </div>`
+              : ChUtils.emptyState(
+                  "bi-envelope",
+                  "Contact information not available.",
+                )
+          }
+        </div></div>`;
+        } catch (err) {
+          content.innerHTML = ChUtils.emptyState("bi-wifi-off", err.message);
+        }
+      }
+    </script>
+  </body>
+</html>
