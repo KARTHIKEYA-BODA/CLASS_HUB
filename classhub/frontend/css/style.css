@@ -570,17 +570,32 @@ img {
 .ch-footer .ch-social-icon {
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
   background: var(--ch-surface-alt);
   border: 1px solid var(--ch-border);
   display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
   color: var(--ch-text-muted) !important;
   font-size: 1.05rem;
   margin-bottom: 0 !important;
+  padding: 0 !important;
   text-decoration: none;
   transition: all 0.2s ease;
+}
+.ch-social-icon i,
+.ch-footer .ch-social-icon i {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  font-size: 1.05rem !important;
+  vertical-align: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 .ch-social-icon:hover,
 .ch-footer .ch-social-icon:hover {

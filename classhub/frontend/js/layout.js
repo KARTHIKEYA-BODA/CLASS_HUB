@@ -36,19 +36,19 @@ const ChLayout = (() => {
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-4 col-md-6">
-            <a class="navbar-brand mb-3 d-inline-flex align-items-center" href="index.html">
+            <a class="navbar-brand mb-3 d-inline-flex align-items-center" href="index.html" style="color:var(--ch-text)!important; text-decoration:none;">
               <span class="ch-logo-badge me-2"><i class="bi bi-mortarboard-fill"></i></span>
               <span style="font-weight:800; font-size:1.25rem; color:var(--ch-text);">ClassHub</span>
             </a>
-            <p class="ch-footer-desc mb-3" style="color:var(--ch-text-muted);">
+            <p class="ch-footer-desc mb-3" style="color:var(--ch-text-muted)!important; font-size:0.92rem; line-height:1.65; max-width:360px;">
               A smart classroom management system built to simplify attendance, notes,
               assignments, and communication between students, class representatives, and faculty.
             </p>
-            <div class="ch-social-links d-flex align-items-center gap-2 mt-3">
-              <a href="#" class="ch-social-icon" aria-label="Facebook" title="Facebook"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="ch-social-icon" aria-label="X (Twitter)" title="X"><i class="bi bi-twitter-x"></i></a>
-              <a href="#" class="ch-social-icon" aria-label="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-              <a href="#" class="ch-social-icon" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
+            <div class="ch-social-links d-flex align-items-center gap-2 mt-3" style="display:flex!important; align-items:center!important; gap:0.65rem!important; margin-top:1rem!important;">
+              <a href="#" class="ch-social-icon" aria-label="Facebook" title="Facebook" style="display:inline-flex!important; align-items:center!important; justify-content:center!important; width:40px!important; height:40px!important; border-radius:50%!important; margin-bottom:0!important;"><i class="bi bi-facebook" style="display:flex!important; align-items:center!important; justify-content:center!important; line-height:1!important; margin:0!important;"></i></a>
+              <a href="#" class="ch-social-icon" aria-label="X (Twitter)" title="X" style="display:inline-flex!important; align-items:center!important; justify-content:center!important; width:40px!important; height:40px!important; border-radius:50%!important; margin-bottom:0!important;"><i class="bi bi-twitter-x" style="display:flex!important; align-items:center!important; justify-content:center!important; line-height:1!important; margin:0!important;"></i></a>
+              <a href="#" class="ch-social-icon" aria-label="LinkedIn" title="LinkedIn" style="display:inline-flex!important; align-items:center!important; justify-content:center!important; width:40px!important; height:40px!important; border-radius:50%!important; margin-bottom:0!important;"><i class="bi bi-linkedin" style="display:flex!important; align-items:center!important; justify-content:center!important; line-height:1!important; margin:0!important;"></i></a>
+              <a href="#" class="ch-social-icon" aria-label="Instagram" title="Instagram" style="display:inline-flex!important; align-items:center!important; justify-content:center!important; width:40px!important; height:40px!important; border-radius:50%!important; margin-bottom:0!important;"><i class="bi bi-instagram" style="display:flex!important; align-items:center!important; justify-content:center!important; line-height:1!important; margin:0!important;"></i></a>
             </div>
           </div>
           <div class="col-lg-2 col-md-6 col-6">
