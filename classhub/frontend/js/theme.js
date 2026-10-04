@@ -6,6 +6,7 @@ const ChTheme = (() => {
 
   const apply = (theme) => {
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-bs-theme', theme);
     updateIcons(theme);
   };
 

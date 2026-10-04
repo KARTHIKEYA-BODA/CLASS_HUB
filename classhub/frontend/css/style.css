@@ -519,44 +519,83 @@ img {
 .ch-footer {
   background: var(--ch-surface);
   border-top: 1px solid var(--ch-border);
-  padding: 3rem 0 1.5rem;
+  padding: 3.5rem 0 1.5rem;
   margin-top: 3rem;
 }
 .ch-footer h6 {
   font-weight: 700;
+  margin-bottom: 1.1rem;
+  color: var(--ch-text);
+  font-size: 1rem;
+}
+.ch-footer .navbar-brand {
+  display: inline-flex !important;
+  align-items: center;
+  color: var(--ch-text) !important;
+  font-weight: 800;
+  font-size: 1.25rem;
   margin-bottom: 1rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+.ch-footer .navbar-brand:hover {
+  opacity: 0.9;
+  color: var(--ch-text) !important;
+}
+.ch-footer-desc {
+  color: var(--ch-text-muted) !important;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin-bottom: 1.25rem;
+  max-width: 360px;
 }
 .ch-footer a {
   color: var(--ch-text-muted);
   display: block;
   margin-bottom: 0.55rem;
   font-size: 0.92rem;
-  transition: color 0.2s;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 .ch-footer a:hover {
   color: var(--ch-primary);
 }
+.ch-footer .ch-social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.ch-social-icon,
+.ch-footer .ch-social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ch-surface-alt);
+  border: 1px solid var(--ch-border);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  color: var(--ch-text-muted) !important;
+  font-size: 1.05rem;
+  margin-bottom: 0 !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.ch-social-icon:hover,
+.ch-footer .ch-social-icon:hover {
+  background: var(--ch-primary) !important;
+  border-color: var(--ch-primary) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
 .ch-footer-bottom {
   border-top: 1px solid var(--ch-border);
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   padding-top: 1.5rem;
   font-size: 0.85rem;
   color: var(--ch-text-muted);
-}
-.ch-social-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--ch-surface-alt);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ch-text-muted);
-  transition: all 0.2s ease;
-}
-.ch-social-icon:hover {
-  background: var(--ch-primary);
-  color: #fff;
 }
 
 /* ---------------------------------------------------------------- */

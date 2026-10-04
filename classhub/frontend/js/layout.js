@@ -36,19 +36,19 @@ const ChLayout = (() => {
       <div class="container">
         <div class="row g-4">
           <div class="col-lg-4 col-md-6">
-            <a class="navbar-brand mb-3 d-inline-flex" href="index.html">
+            <a class="navbar-brand mb-3 d-inline-flex align-items-center" href="index.html">
               <span class="ch-logo-badge me-2"><i class="bi bi-mortarboard-fill"></i></span>
-              <span style="font-weight:800; font-size:1.25rem;">ClassHub</span>
+              <span style="font-weight:800; font-size:1.25rem; color:var(--ch-text);">ClassHub</span>
             </a>
-            <p class="text-muted small mb-3" style="color:var(--ch-text-muted);">
+            <p class="ch-footer-desc mb-3" style="color:var(--ch-text-muted);">
               A smart classroom management system built to simplify attendance, notes,
               assignments, and communication between students, class representatives, and faculty.
             </p>
-            <div class="d-flex gap-2">
-              <a href="#" class="ch-social-icon"><i class="bi bi-facebook"></i></a>
-              <a href="#" class="ch-social-icon"><i class="bi bi-twitter-x"></i></a>
-              <a href="#" class="ch-social-icon"><i class="bi bi-linkedin"></i></a>
-              <a href="#" class="ch-social-icon"><i class="bi bi-instagram"></i></a>
+            <div class="ch-social-links d-flex align-items-center gap-2 mt-3">
+              <a href="#" class="ch-social-icon" aria-label="Facebook" title="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="ch-social-icon" aria-label="X (Twitter)" title="X"><i class="bi bi-twitter-x"></i></a>
+              <a href="#" class="ch-social-icon" aria-label="LinkedIn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a href="#" class="ch-social-icon" aria-label="Instagram" title="Instagram"><i class="bi bi-instagram"></i></a>
             </div>
           </div>
           <div class="col-lg-2 col-md-6 col-6">
